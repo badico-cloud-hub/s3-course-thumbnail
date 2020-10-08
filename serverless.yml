@@ -1,0 +1,41 @@
+service: thumbnail-serverless
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: python3.7
+  environment:
+    BUCKET_NAME: thumbnail-serverless-dev-serverlessdeploymentbuck-5u1h26ig44jp
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - "s3:PutObject"
+        - "s3:PutObjectAcl"
+      Resource: "arn:aws:s3:::thumbnail-serverless-dev-serverlessdeploymentbuck-5u1h26ig44jp/*"
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    noDeploy: []
+  
+functions:
+  create_thumbnail:
+    handler: create_thumbnail.handler
+    events:
+      - s3:
+        bucket: $(env:BUCKET_NAME)
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: originals/
+          - suffix: .jpg
+      - s3:
+        bucket: $(env:BUCKET_NAME)
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: originals/
+          - suffix: .png
+          
