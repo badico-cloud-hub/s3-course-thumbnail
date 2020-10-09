@@ -12,6 +12,7 @@ custom:
 provider:
   name: aws
   runtime: python3.7
+  region: eu-central-1
   environment:
     BUCKET_THUMBNAIL: "${self:custom.bucketThumbnail}"
     BUCKET_TARGET: "${self:custom.bucketTarget}"
