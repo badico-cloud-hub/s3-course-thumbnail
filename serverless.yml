@@ -6,6 +6,7 @@ custom:
   pythonRequirements:
     dockerizePip: true
     noDeploy: []
+  bucketTarget: plando-attachments-local-development-bucket-v2
   bucketThumbnail: thumbnail-serverless-dev-serverlessdeploymentbuck-5u1h26ig44jp
   
 
@@ -14,7 +15,8 @@ provider:
   name: aws
   runtime: python3.7
   environment:
-    BUCKET_NAME: "${self:custom.bucketThumbnail}"
+    BUCKET_THUMBNAIL: "${self:custom.bucketThumbnail}"
+    BUCKET_TARGET: "${self:custom.bucketTarget}"
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -30,16 +32,14 @@ functions:
     handler: create_thumbnail.handler
     events:
       - s3:
-          bucket: "${self:custom.bucketThumbnail}"
+          bucket: "${self:custom.bucketTarget}"
           event: s3:ObjectCreated:*
           rules:
-            - prefix: originals/
             - suffix: .jpg
           existing: true
       - s3:
-          bucket: "${self:custom.bucketThumbnail}"
+          bucket: "${self:custom.bucketTarget}"
           event: s3:ObjectCreated:*
           rules:
-            - prefix: originals/
             - suffix: .png
           existing: true
