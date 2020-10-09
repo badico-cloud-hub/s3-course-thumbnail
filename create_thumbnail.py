@@ -8,10 +8,11 @@ s3 = boto3.resource('s3')
 session = boto3.Session()
 client = session.client('s3')
 
-BUCKET_NAME = os.environ.get('BUCKET_NAME')
+BUCKET_TARGET = os.environ.get('BUCKET_TARGET')
+BUCKET_THUMBNAIL = os.environ.get('BUCKET_THUMBNAIL')
 
 def get_image(key_image):
-    response = client.get_object(Bucket=BUCKET_NAME, Key=key_image)
+    response = client.get_object(Bucket=BUCKET_TARGET, Key=key_image)
     print(response)
     return response['Body']
 
@@ -41,7 +42,7 @@ def create_thumbnail(key_image, size):
     thumbnail_name = '%s_%sx%s.%s' % (image_name, size[0], size[1], image_extension)
 
 
-    s3.Bucket(BUCKET_NAME).put_object(Key='thumbnail/%s' % thumbnail_name,
+    s3.Bucket(BUCKET_THUMBNAIL).put_object(Key='thumbnail/%s' % thumbnail_name,
                                     Body=image_bytes,
                                     ACL='public-read',
                                     ContentType='image/%s' % image_extension)
