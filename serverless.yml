@@ -7,10 +7,8 @@ custom:
     dockerizePip: true
     noDeploy: []
   bucketTarget: plando-attachments-local-development-bucket-v2
-  bucketThumbnail: thumbnail-serverless-dev-serverlessdeploymentbuck-5u1h26ig44jp
+  bucketThumbnail: plando-thumbnails-development-bucket
   
-
-
 provider:
   name: aws
   runtime: python3.7
