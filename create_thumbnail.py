@@ -22,9 +22,9 @@ def buffer_to_array(buffer):
     return image_array
 
 def get_image_attribute(key_image):
-    file = key_image.split('/')[1]
+    prefix, file = key_image.split('/')
     image_helper = file.split('.')
-    return image_helper[0], image_helper[1]
+    return image_helper[0], image_helper[1], prefix
 
 
 def generate_buffer(image_array, image_extension):
@@ -36,13 +36,13 @@ def create_thumbnail(key_image, size):
     buffer = get_image(key_image)
     image_array = buffer_to_array(buffer)
     image_resized = cv2.resize(image_array, size, interpolation=cv2.INTER_AREA)
-    image_name, image_extension = get_image_attribute(key_image)
+    image_name, image_extension, prefix = get_image_attribute(key_image)
     image_bytes = generate_buffer(image_resized, image_extension)
 
     thumbnail_name = '%s_%sx%s.%s' % (image_name, size[0], size[1], image_extension)
 
 
-    s3.Bucket(BUCKET_THUMBNAIL).put_object(Key='thumbnail/%s' % thumbnail_name,
+    s3.Bucket(BUCKET_THUMBNAIL).put_object(Key='%s/%s' % (prefix, thumbnail_name),
                                     Body=image_bytes,
                                     ACL='public-read',
                                     ContentType='image/%s' % image_extension)
