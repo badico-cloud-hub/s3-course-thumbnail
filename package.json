@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "serverless offline"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +13,7 @@
     "serverless": "^2.6.0"
   },
   "devDependencies": {
-    "serverless-python-requirements": "^5.1.1"
+    "serverless-offline": "^8.5.0",
+    "serverless-python-requirements": "^5.3.1"
   }
 }

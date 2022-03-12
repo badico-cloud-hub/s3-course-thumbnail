@@ -1,9 +1,10 @@
-service: thumbnail-serverless
+service: bilblue-thumbnail-serverless
 
 frameworkVersion: '2'
 
 custom:
   pythonRequirements:
+    dockerImage: python:3.7-stretch
     dockerizePip: true
     noDeploy: []
     useDownloadCache: false
@@ -11,13 +12,18 @@ custom:
     zip: true
     slim: true
     strip: false
-  bucketTarget: follow-family-images-development-bucket-v1
-  bucketThumbnail: follow-family-images-thumbnails-bucket-v1
+  bucketTarget: bilblue-backoffice-files
+  bucketThumbnail: bilblue-files-thumbnails
+  serverless-offline:
+    httpsProtocol: "dev-certs"
+    httpPort: 3000
+    host: "0.0.0.0"
   
 provider:
   name: aws
   runtime: python3.7
-  region: sa-east-1
+  region: us-east-1
+  lambdaHashingVersion: "20201221"
   environment:
     BUCKET_THUMBNAIL: "${self:custom.bucketThumbnail}"
     BUCKET_TARGET: "${self:custom.bucketTarget}"
@@ -27,9 +33,15 @@ provider:
         - "s3:PutObject"
         - "s3:PutObjectAcl"
       Resource: "arn:aws:s3:::${self:custom.bucketThumbnail}/*"
+    - Effect: 'Allow'
+      Action:
+        - "s3:GetObject"
+        - "s3:GetObjectAcl"
+      Resource: "arn:aws:s3:::${self:custom.bucketTarget}/*"
 
 plugins:
   - serverless-python-requirements
+  - serverless-offline
 functions:
   create_thumbnail:
     handler: create_thumbnail.handler
