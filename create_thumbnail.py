@@ -54,7 +54,7 @@ def create_thumbnail(key_image, min_size):
 
     s3.Bucket(BUCKET_THUMBNAIL).put_object(Key='%s' % (thumbnail_name),
                                     Body=image_bytes,
-                                    ACL='public-read',
+                                    # ACL='public-read',
                                     ContentType='image/%s' % image_extension)
     
 
