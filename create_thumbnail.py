@@ -23,6 +23,7 @@ BUCKET_TARGET = os.environ.get('BUCKET_TARGET')
 BUCKET_THUMBNAIL = os.environ.get('BUCKET_THUMBNAIL')
 
 def get_image(key_image):
+    print('[it will get the image with following key]: ', key_image)
     response = client.get_object(Bucket=BUCKET_TARGET, Key=key_image)
     print(response)
     return response['Body']
