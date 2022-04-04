@@ -23,8 +23,7 @@ BUCKET_TARGET = os.environ.get('BUCKET_TARGET')
 BUCKET_THUMBNAIL = os.environ.get('BUCKET_THUMBNAIL')
 
 def get_image(key_image):
-    print('[it will get the image with following key]: ', unquote_plus(key_image))
-    response = client.get_object(Bucket=BUCKET_TARGET, Key=unquote_plus(key_image))
+    response = client.get_object(Bucket=BUCKET_TARGET, Key=key_image)
     print(response)
     return response['Body']
 
@@ -64,13 +63,15 @@ def handler(event, context):
     
     key_image = event['Records'][0]['s3']['object']['key']
 
-    # create medium thumbnail
-    create_thumbnail(key_image, MEDIUM_MIN_DIMENSION)
-    # create small thumbnail
-    create_thumbnail(key_image, SMALL_MIN_DIMENSION)
+    print('[original image key]: ', key_image)
+    unquoted_key_image = unquote_plus(key_image)
+
+    print('[unquoted image key]: ', unquoted_key_image )    
+    create_thumbnail(unquoted_key_image, MEDIUM_MIN_DIMENSION)
+    create_thumbnail(unquoted_key_image, SMALL_MIN_DIMENSION)
 
     print('[Finish Handler] \n')
-    print('[key_image]: ', key_image)
+    print('[key_image]: ', unquoted_key_image)
     
     return True
 
