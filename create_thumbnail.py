@@ -3,7 +3,7 @@ try:
   import unzip_requirements
 except ImportError:
   pass
-
+from urllib.parse import unquote_plus
 from numpy import asarray
 from cv2 import imdecode, imencode, IMREAD_COLOR
 import boto3
@@ -23,8 +23,8 @@ BUCKET_TARGET = os.environ.get('BUCKET_TARGET')
 BUCKET_THUMBNAIL = os.environ.get('BUCKET_THUMBNAIL')
 
 def get_image(key_image):
-    print('[it will get the image with following key]: ', key_image)
-    response = client.get_object(Bucket=BUCKET_TARGET, Key=key_image)
+    print('[it will get the image with following key]: ', unquote_plus(key_image))
+    response = client.get_object(Bucket=BUCKET_TARGET, Key=unquote_plus(key_image))
     print(response)
     return response['Body']
 
@@ -34,9 +34,8 @@ def buffer_to_array(buffer):
     return image_array
 
 def get_image_attribute(key_image):
-    # file = key_image.split('/')
     image_helper = key_image.split('.')
-    return image_helper[0], image_helper[1]
+    return '.'.join(image_helper[:-1]), image_helper[-1]
 
 
 def generate_buffer(image_array, image_extension):
