@@ -1,6 +1,11 @@
-service: bilblue-thumbnail-serverless
+service: thumbnail-service
 
 frameworkVersion: '2'
+
+package:
+  exclude:
+    - node_modules/**
+    - venv/**
 
 custom:
   pythonRequirements:
@@ -12,8 +17,8 @@ custom:
     zip: true
     slim: true
     strip: false
-  bucketTarget: bilblue-backoffice-files
-  bucketThumbnail: bilblue-files-thumbnails
+  bucketTarget: badico-s3-course
+  bucketThumbnail: badico-s3-thumbnails
   serverless-offline:
     httpsProtocol: "dev-certs"
     httpPort: 3000
