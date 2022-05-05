@@ -14,6 +14,5 @@ COPY . .
 
 RUN apt-get update && yes | apt-get install libgl1
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
 
 

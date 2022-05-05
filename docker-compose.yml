@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  thumbnail:
+    container_name: thumbnail-service
+    image: py-sls
+    build: .
+    volumes:
+      - ./src:/usr/src/app/src
+    command: tail -f /dev/null
+    environment:
+      - AWS_ACCESS_KEY_ID=
+      - AWS_SECRET_ACCESS_KEY=

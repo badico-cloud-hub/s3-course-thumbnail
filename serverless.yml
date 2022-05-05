@@ -49,7 +49,7 @@ plugins:
   - serverless-offline
 functions:
   create_thumbnail:
-    handler: create_thumbnail.handler
+    handler: src/create_thumbnail.handler
     events:
       - s3:
           bucket: "${self:custom.bucketTarget}"
