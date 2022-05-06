@@ -6,6 +6,7 @@ package:
   exclude:
     - node_modules/**
     - venv/**
+    - .git/**
 
 custom:
   pythonRequirements:
@@ -19,6 +20,7 @@ custom:
     strip: false
   bucketTarget: badico-s3-course
   bucketThumbnail: badico-s3-thumbnails
+  thumbnailSizes: 150:300
   serverless-offline:
     httpsProtocol: "dev-certs"
     httpPort: 3000
@@ -32,6 +34,7 @@ provider:
   environment:
     BUCKET_THUMBNAIL: "${self:custom.bucketThumbnail}"
     BUCKET_TARGET: "${self:custom.bucketTarget}"
+    THUMBNAIL_SIZES: "${self:custom.thumbnailSizes}"
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -49,7 +52,7 @@ plugins:
   - serverless-offline
 functions:
   create_thumbnail:
-    handler: src/create_thumbnail.handler
+    handler: src/main.handler
     events:
       - s3:
           bucket: "${self:custom.bucketTarget}"
