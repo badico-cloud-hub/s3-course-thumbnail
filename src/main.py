@@ -1,7 +1,12 @@
-from factories import create_thumb_factory, get_thumbnail_sizes 
+try:
+  import unzip_requirements
+except ImportError:
+  pass
+
+from src.factories import make_create_thumb, get_thumbnail_sizes 
 
 def handler(event, context):
-    create_thumb_by_size = create_thumb_factory(event)
+    create_thumb_by_size = make_create_thumb(event)
     [
         create_thumb_by_size(thumbnail_size) 
         for thumbnail_size 

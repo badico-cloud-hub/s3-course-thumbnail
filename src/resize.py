@@ -1,58 +1,54 @@
-from cv2 import resize, INTER_AREA
+from cv2 import resize as rsz, imencode, INTER_AREA
+
+def get_the_lower_value(width, height):
+    return width if width <= height else height
 
 def check_dimensions(width, height, min_size):
     width_lower_than_min = width < min_size
     height_lower_than_min = height < min_size
     return width_lower_than_min or height_lower_than_min 
 
-def get_the_lower_value(width, height):
-    print('[Enter "get_the_lower_value" func]')
-    return width if width <= height else height
+def resize(image_array, thumb_size):
+    print(f"aplicando resize para {thumb_size}px")
 
-def get_new_size(image_array, min_size):
-    print('[Enter "get_new_size" func]')
-    print('[min size]: ', min_size)
-    height, width, channels = image_array.shape
+    height, width, _ = image_array.shape
+    print('[original height]: ', height)
+    print('[original width]: ', width)
 
-    print('[height from "shape"]: ', height)
-    print('[width from "shape"]: ', width)
+    dimension_lower_than_min = check_dimensions(width, height, thumb_size)
+    print('[dimension_lower_than_min]: ', dimension_lower_than_min)
 
-    some_dimension_lower_than_min = check_dimensions(width, height, min_size)
+    if dimension_lower_than_min:
+        dimension = [int(width), int(height)]
+        return rsz(image_array, dimension, interpolation=INTER_AREA)
 
-    print('[some_dimension_lower_than_min]: ', some_dimension_lower_than_min)
+    resize_factor_based_on_width = width / thumb_size
+    resize_factor_based_on_height = height / thumb_size
 
-    if some_dimension_lower_than_min:
-        return int(width), int(height)
-
-    resize_factor_based_on_width = width / min_size
-    resize_factor_based_on_height = height / min_size
-
+    print('[width factor]: ', resize_factor_based_on_width)
     print('[height factor]: ', resize_factor_based_on_height)
-    print('[width factor ]: ', resize_factor_based_on_width)
 
-    lower_ratio = get_the_lower_value(resize_factor_based_on_width, resize_factor_based_on_height)
+    lower_ratio = get_the_lower_value(
+        resize_factor_based_on_width, 
+        resize_factor_based_on_height
+    )
 
     print('[lower ratio]: ', lower_ratio)
 
-    new_height = height / lower_ratio
-    new_width = width / lower_ratio
+    thumb_height = height / lower_ratio
+    thumb_width = width / lower_ratio
 
-    print('[new height]: ', new_height)
-    print('[new_width]: ', new_width)
+    print('[new height]: ', thumb_height)
+    print('[new_width]: ', thumb_width)
 
-    return int(new_width), int(new_height)
+    dimension = [int(thumb_width), int(thumb_height)]
+    return rsz(image_array, dimension, interpolation=INTER_AREA)
 
-def resize_dimensions(image_array, min_size):
-    print('[enter the "resize_dimensions" func]')
 
-    new_size = get_new_size(image_array, min_size)
 
-    print('[new_size]: ', new_size)
-    print('[new_size type]: ', type(new_size))
 
-    image_resized = resize(image_array, new_size, interpolation=INTER_AREA)
 
-    print('[image_resized]: ', image_resized)
-    print('[image_resized type]: ', type(image_resized))
 
-    return image_resized, new_size[0], new_size[1] 
+
+
+
